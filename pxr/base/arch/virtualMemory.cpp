@@ -67,7 +67,7 @@ void *
 ArchReserveVirtualMemory(size_t numBytes)
 {
     void *addr = mmap(NULL, numBytes, PROT_NONE,
-                      MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+                      MAP_PRIVATE | MAP_ANON, -1, 0);
     if (!addr || addr == MAP_FAILED)
         return nullptr;
     return addr;
