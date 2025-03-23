@@ -414,6 +414,10 @@ function(boost_python_cpp_target TARGET_NAME)
         set(destination "tests/lib")
     else()
         add_executable(${TARGET_NAME})
+        # Workaround for https://github.com/PixarAnimationStudios/OpenUSD/issues/2371
+        if (PXR_ENABLE_PYTHON_SUPPORT AND PXR_PY_UNDEFINED_DYNAMIC_LOOKUP)
+            target_link_libraries(${TARGET_NAME} Python3::Python)
+        endif ()
         set(destination "tests")
     endif()
 

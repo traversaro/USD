@@ -167,6 +167,11 @@ function(pxr_cpp_bin BIN_NAME)
 
     add_executable(${BIN_NAME} ${BIN_NAME}.cpp)
 
+    # Workaround for https://github.com/PixarAnimationStudios/OpenUSD/issues/2371
+    if (PXR_ENABLE_PYTHON_SUPPORT AND PXR_PY_UNDEFINED_DYNAMIC_LOOKUP)
+        target_link_libraries(${BIN_NAME} Python3::Python)
+    endif ()
+
     # Turn PIC ON otherwise ArchGetAddressInfo() on Linux may yield
     # unexpected results.
     _get_folder("" folder)
@@ -637,6 +642,11 @@ function(pxr_build_test TEST_NAME)
     add_executable(${TEST_NAME}
         ${bt_CPPFILES}
     )
+
+    # Workaround for https://github.com/PixarAnimationStudios/OpenUSD/issues/2371
+    if (PXR_ENABLE_PYTHON_SUPPORT AND PXR_PY_UNDEFINED_DYNAMIC_LOOKUP)
+        target_link_libraries(${TEST_NAME} Python3::Python)
+    endif ()
 
     # Turn PIC ON otherwise ArchGetAddressInfo() on Linux may yield
     # unexpected results.
