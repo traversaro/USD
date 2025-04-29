@@ -653,6 +653,14 @@ function(pxr_build_test TEST_NAME)
         ${bt_LIBRARIES}
     )
 
+    # The solution in https://github.com/PixarAnimationStudios/OpenUSD/pull/3577 works fine
+    # for executables that directly link usd_tf, while some tests do not directly link usd_tf,
+    # or they directly link it but they do not use tf, so depending on the linker configuration
+    # the link to python may be stripped, so to play sure we explicitly link Python3::Python here.
+    if(PXR_ENABLE_PYTHON_SUPPORT AND PXR_PY_UNDEFINED_DYNAMIC_LOOKUP)
+        target_link_libraries(${TEST_NAME} Python3::Python)
+    endif()
+
     # Find libraries under the install prefix, which has the core USD
     # libraries.
     _pxr_init_rpath(rpath "tests")
