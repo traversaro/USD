@@ -167,6 +167,13 @@ function(pxr_cpp_bin BIN_NAME)
 
     add_executable(${BIN_NAME} ${BIN_NAME}.cpp)
 
+    # The workaround in https://github.com/PixarAnimationStudios/OpenUSD/pull/3577 is not perfect in case of
+    # transitive dependencies, to be sure Python is linked at least for OpenUSD binaries we always link it
+    if(PXR_ENABLE_PYTHON_SUPPORT AND PXR_PY_UNDEFINED_DYNAMIC_LOOKUP)
+        target_link_libraries(${BIN_NAME} PRIVATE Python3::Python)
+    endif()
+
+
     # Turn PIC ON otherwise ArchGetAddressInfo() on Linux may yield
     # unexpected results.
     _get_folder("" folder)
@@ -643,6 +650,12 @@ function(pxr_build_test TEST_NAME)
     add_executable(${TEST_NAME}
         ${bt_CPPFILES}
     )
+
+    # The workaround in https://github.com/PixarAnimationStudios/OpenUSD/pull/3577 is not perfect in case of
+    # transitive dependencies, to be sure Python is linked at least for OpenUSD binaries we always link it
+    if(PXR_ENABLE_PYTHON_SUPPORT AND PXR_PY_UNDEFINED_DYNAMIC_LOOKUP)
+        target_link_libraries(${BIN_NAME} PRIVATE Python3::Python)
+    endif()
 
     # Turn PIC ON otherwise ArchGetAddressInfo() on Linux may yield
     # unexpected results.
